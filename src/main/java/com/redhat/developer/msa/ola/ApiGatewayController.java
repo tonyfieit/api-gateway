@@ -41,6 +41,7 @@ public class ApiGatewayController {
 	@RequestMapping(method = RequestMethod.GET, value = "/api", produces = "application/json")
 	public List<String> ola() {
 		return services.stream()
+				.parallel()
 				.map(s -> String.format("http://%s/api", s))
 				.map(url -> HystrixFeign.builder().target(Greeting.class, url, () -> "Bye"))
 				.map(Greeting::sayHi)
