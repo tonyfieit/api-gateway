@@ -42,7 +42,7 @@ public class ApiGatewayController {
 	public List<String> ola() {
 		return services.stream()
 				.parallel()
-				.map(s -> String.format("http://%s/api", s))
+				.map(s -> String.format("http://%s/api/%s", s, s))
 				.map(url -> HystrixFeign.builder().target(Greeting.class, url, () -> "Bye"))
 				.map(Greeting::sayHi)
 				.collect(Collectors.toList());
