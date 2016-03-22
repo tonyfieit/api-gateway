@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2016, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  * <p/>
@@ -18,6 +18,8 @@ package com.redhat.developer.msa.ola;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,34 +27,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.netflix.hystrix.HystrixCommandProperties;
-
-import feign.RequestLine;
 import feign.hystrix.HystrixFeign;
 
 @RestController
 public class ApiGatewayController {
 
-    static {
-        HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(2000);
-    }
-
+    // List of services
     private static final List<String> services = Arrays.asList("hello", "ola", "hola", "aloha", "bonjour");
+
+    // Regex to extract the hostname of an URL
+    private Pattern urlPattern = Pattern.compile("http://(?<url>.*):8080/.*");
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET, value = "/api", produces = "application/json")
     public List<String> api() {
+        // Use Java 8 Streams (map/collect) to invoke the services
         return services.stream()
             .parallel()
+            // Creates URLs endpoints
             .map(s -> String.format("http://%s:8080/api/%s", s, s))
-            .map(url -> HystrixFeign.builder().target(Greeting.class, url, () -> "Bye"))
+            // Creates a Feign Target with fallback support using the Greeting interface
+            .map(url -> HystrixFeign.builder().target(Greeting.class, url, () -> {
+                // Fallback implementation
+                Matcher m = urlPattern.matcher(url);
+                String service = url;
+                if (m.find()) {
+                    service = m.group("url");
+                }
+                return service + " response (Fallback)";
+            }))
+            // Invokes the Feign target through the Greeting interface
             .map(Greeting::sayHi)
+            // Return the result as List<String>
             .collect(Collectors.toList());
-    }
-
-    interface Greeting {
-        @RequestLine("GET /")
-        String sayHi();
     }
 
 }

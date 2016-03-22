@@ -16,14 +16,11 @@
  */
 package com.redhat.developer.msa.ola;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import feign.RequestLine;
 
-@SpringBootApplication
-public class ApiGatewayApplication {
+//this class has to be public until https://github.com/Netflix/feign/issues/353 gets fixed
+public interface Greeting {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ApiGatewayApplication.class, args);
-	}
-
+    @RequestLine("GET /")
+    String sayHi();
 }
