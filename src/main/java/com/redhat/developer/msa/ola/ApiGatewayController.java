@@ -16,41 +16,43 @@
  */
 package com.redhat.developer.msa.ola;
 
-import com.netflix.hystrix.HystrixCommandProperties;
-import feign.RequestLine;
-import feign.hystrix.HystrixFeign;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.netflix.hystrix.HystrixCommandProperties;
+
+import feign.RequestLine;
+import feign.hystrix.HystrixFeign;
 
 @RestController
 public class ApiGatewayController {
 
-	static {
-		HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(2000);
-	}
+    static {
+        HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(2000);
+    }
 
-	private static final List<String> services = Arrays.asList("hello", "ola", "hola", "aloha", "bonjour");
+    private static final List<String> services = Arrays.asList("hello", "ola", "hola", "aloha", "bonjour");
 
-	@CrossOrigin
-	@RequestMapping(method = RequestMethod.GET, value = "/api", produces = "application/json")
-	public List<String> ola() {
-		return services.stream()
-				.parallel()
-				.map(s -> String.format("http://%s:8080", s, s))
-				.map(url -> HystrixFeign.builder().target(Greeting.class, url, () -> "Bye"))
-				.map(Greeting::sayHi)
-				.collect(Collectors.toList());
-	}
+    @CrossOrigin
+    @RequestMapping(method = RequestMethod.GET, value = "/api", produces = "application/json")
+    public List<String> api() {
+        return services.stream()
+            .parallel()
+            .map(s -> String.format("http://%s:8080/api/%s", s, s))
+            .map(url -> HystrixFeign.builder().target(Greeting.class, url, () -> "Bye"))
+            .map(Greeting::sayHi)
+            .collect(Collectors.toList());
+    }
 
-	interface Greeting {
-		@RequestLine("GET /api")
-		String sayHi();
-	}
+    interface Greeting {
+        @RequestLine("GET /")
+        String sayHi();
+    }
 
 }
