@@ -14,13 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.redhat.developer.msa.ola;
+package com.redhat.developer.msa.api_gateway;
 
-import feign.RequestLine;
+import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
 
-//this class has to be public until https://github.com/Netflix/feign/issues/353 gets fixed
-public interface Greeting {
+@SpringBootApplication
+public class ApiGatewayApplication {
 
-    @RequestLine("GET /")
-    String sayHi();
+	public static void main(String[] args) {
+		SpringApplication.run(ApiGatewayApplication.class, args);
+	}
+
+	@Bean
+	public ServletRegistrationBean hystrixMetricsStreamServlet() {
+		return new ServletRegistrationBean(new HystrixMetricsStreamServlet(), "/hystrix.stream");
+	}
+
 }
