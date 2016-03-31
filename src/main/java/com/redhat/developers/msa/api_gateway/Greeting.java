@@ -16,11 +16,12 @@
  */
 package com.redhat.developers.msa.api_gateway;
 
+import feign.Param;
 import feign.RequestLine;
 
 public interface Greeting {
 
-	@RequestLine("GET /")
-	String sayHi();
+    @RequestLine("GET /api/{path}")
+    String apiGatewayService(@Param("path") String path);
 
 }

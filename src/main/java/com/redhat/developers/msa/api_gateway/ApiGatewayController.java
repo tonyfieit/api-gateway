@@ -45,8 +45,7 @@ public class ApiGatewayController {
     public List<String> api() {
         return services.stream()
             .parallel()
-            .map(this::createFeign)
-            .map(Greeting::sayHi)
+            .map(name -> createFeign(name).apiGatewayService(name))
             .collect(Collectors.toList());
     }
 
@@ -58,8 +57,8 @@ public class ApiGatewayController {
      * @return The feign pointing to the service URL and with Hystrix fallback.
      */
     private Greeting createFeign(String name) {
-        String url = String.format("http://%s:8080/api/%s", name, name);
-        return HystrixFeign.builder().target(Greeting.class, url, () -> String.format("%s response (fallback)", name));
+        String url = String.format("http://%s:8080/", name);
+        return HystrixFeign.builder().target(Greeting.class, url, (s) -> String.format("%s response (fallback)", name));
     }
 
 }
