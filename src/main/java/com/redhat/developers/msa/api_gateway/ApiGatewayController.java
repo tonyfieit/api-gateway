@@ -16,6 +16,8 @@
  */
 package com.redhat.developers.msa.api_gateway;
 
+import feign.Logger;
+import feign.Logger.Level;
 import feign.hystrix.HystrixFeign;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,7 +60,9 @@ public class ApiGatewayController {
      */
     private Greeting createFeign(String name) {
         String url = String.format("http://%s:8080/", name);
-        return HystrixFeign.builder().target(Greeting.class, url, (s) -> String.format("%s response (fallback)", name));
+        return HystrixFeign.builder()
+            .logger(new Logger.ErrorLogger()).logLevel(Level.BASIC)
+            .target(Greeting.class, url, (s) -> String.format("%s response (fallback)", name));
     }
 
 }
