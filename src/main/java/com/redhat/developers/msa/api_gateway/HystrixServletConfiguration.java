@@ -9,6 +9,11 @@ import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServl
 @Configuration
 public class HystrixServletConfiguration {
 
+    /**
+     * Register the Hystrix Metrix Servlet
+     * 
+     * @return
+     */
     @Bean
     public ServletRegistrationBean jerseyServlet() {
         ServletRegistrationBean registration = new ServletRegistrationBean(new HystrixMetricsStreamServlet(), "/hystrix.stream");

@@ -16,53 +16,49 @@
  */
 package com.redhat.developers.msa.api_gateway;
 
-import feign.Logger;
-import feign.Logger.Level;
-import feign.hystrix.HystrixFeign;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.github.kristofa.brave.Brave;
+import com.github.kristofa.brave.ServerSpan;
+import com.redhat.developers.msa.api_gateway.feign.FeignClientFactory;
 
 @RestController
 public class ApiGatewayController {
 
-    /**
-     * The list of services we're invoking through the API Gateway
-     */
-    private static final List<String> services = Arrays.asList("hello", "ola", "hola", "aloha", "bonjour", "namaste");
+    @Autowired
+    private FeignClientFactory feignClientFactory;
+
+    @Autowired
+    private Brave brave;
 
     /**
      * This /api REST endpoint uses Java 8 parallel stream to create the Feign, invoke it, and collect the result as a List that
      * will be rendered as a JSON Array.
-     * 
+     *
      * @return
      */
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET, value = "/api", produces = "application/json")
     public List<String> api() {
-        return services.stream()
+        // This stores the Original/Parent ServerSpan from ZiPkin.
+        ServerSpan serverSpan = brave.serverSpanThreadBinder().getCurrentServerSpan();
+        return feignClientFactory.getFeignClients()
+            .stream()
             .parallel()
-            .map(name -> createFeign(name).apiGatewayService(name))
+            // We set the ServerSpan to each client to avoid loosing the tracking in a multi-thread invocation
+            .map((feign) -> "UPDATED - " + feign.invokeService(serverSpan))
             .collect(Collectors.toList());
     }
 
-    /**
-     * This is were the "magic" happens: it creates a Feign, which is a proxy interface for remote calling a REST endpoint with
-     * Hystrix fallback support.
-     * 
-     * @param name The service to be invoked.
-     * @return The feign pointing to the service URL and with Hystrix fallback.
-     */
-    private Greeting createFeign(String name) {
-        String url = String.format("http://%s:8080/", name);
-        return HystrixFeign.builder()
-            .logger(new Logger.ErrorLogger()).logLevel(Level.BASIC)
-            .target(Greeting.class, url, (s) -> String.format("%s response (fallback)", name));
+    @RequestMapping(method = RequestMethod.GET, value = "/health")
+    public String health() {
+        return "I'm ok";
     }
-
 }

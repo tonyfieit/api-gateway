@@ -14,14 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.redhat.developers.msa.api_gateway;
+package com.redhat.developers.msa.api_gateway.feign;
 
-import feign.Param;
 import feign.RequestLine;
 
-public interface Greeting {
+public interface NamasteService {
 
-    @RequestLine("GET /api/{path}")
-    String apiGatewayService(@Param("path") String path);
+    @RequestLine("GET /api/namaste")
+    String namaste();
 
 }
