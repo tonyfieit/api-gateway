@@ -29,6 +29,8 @@ import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ServerSpan;
 import com.redhat.developers.msa.api_gateway.feign.FeignClientFactory;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 public class ApiGatewayController {
 
@@ -46,6 +48,7 @@ public class ApiGatewayController {
      */
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET, value = "/api", produces = "application/json")
+    @ApiOperation("Invoke all microservices in parallel")
     public List<String> api() {
         // This stores the Original/Parent ServerSpan from ZiPkin.
         ServerSpan serverSpan = brave.serverSpanThreadBinder().getCurrentServerSpan();
@@ -53,11 +56,12 @@ public class ApiGatewayController {
             .stream()
             .parallel()
             // We set the ServerSpan to each client to avoid loosing the tracking in a multi-thread invocation
-            .map((feign) -> "UPDATED - " + feign.invokeService(serverSpan))
+            .map((feign) -> feign.invokeService(serverSpan))
             .collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/health")
+    @ApiOperation("Used to verify the health of the service")
     public String health() {
         return "I'm ok";
     }
