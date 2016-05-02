@@ -1,18 +1,20 @@
 # api-gateway
 API Gateway using Feign and Hystrix.
 
-Build and Deploy api-gateway
------------------------------
+The API-Gateway is a microservices architectural pattern. For more information about this pattern, visit: <http://microservices.io/patterns/apigateway.html>
+
+The detailed instructions to run *Red Hat Helloworld MSA* demo, can be found at the following repository: <https://github.com/redhat-helloworld-msa/helloworld-msa>
+
+
+Build and Deploy api-gateway locally
+------------------------------------
 
 1. Open a command prompt and navigate to the root directory of this api-gateway.
 2. Type this command to build and execute the api-gateway:
 
         mvn clean compile spring-boot:run
 
-Access the api-gateway
-----------------------
-
-The application will be running at the following URL: <http://localhost:8080/api>
+3. The application will be running at the following URL: <http://localhost:8080/api>
         
 Deploy the application in Openshift
 -----------------------------------
