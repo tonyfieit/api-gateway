@@ -5,4 +5,4 @@ ENV AB_JOLOKIA_HTTPS true
 
 EXPOSE 8080
 
-ADD target/api-gateway.jar /app
+ADD target/api-gateway.jar /app/
