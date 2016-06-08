@@ -30,9 +30,7 @@ public class FeignClientFactory {
             services = new ArrayList<>();
             services.add(new AlohaFeignClient());
             services.add(new BonjourFeignClient());
-            services.add(new HelloFeignClient());
             services.add(new HolaFeignClient());
-            services.add(new NamasteFeignClient());
             services.add(new OlaFeignClient());
         }
         return services;
@@ -64,19 +62,6 @@ public class FeignClientFactory {
 
     }
 
-    class HelloFeignClient extends GenericFeignClient<HelloService> {
-
-        public HelloFeignClient() {
-            super(HelloService.class, "hello", () -> "Hello response (fallback)", brave);
-        }
-
-        @Override
-        public String invokeService(ServerSpan serverSpan) {
-            return createFeign(serverSpan).hello();
-        }
-
-    }
-
     class HolaFeignClient extends GenericFeignClient<HolaService> {
 
         public HolaFeignClient() {
@@ -86,19 +71,6 @@ public class FeignClientFactory {
         @Override
         public String invokeService(ServerSpan serverSpan) {
             return createFeign(serverSpan).hola();
-        }
-
-    }
-
-    class NamasteFeignClient extends GenericFeignClient<NamasteService> {
-
-        public NamasteFeignClient() {
-            super(NamasteService.class, "namaste", () -> "Namaste response (fallback)", brave);
-        }
-
-        @Override
-        public String invokeService(ServerSpan serverSpan) {
-            return createFeign(serverSpan).namaste();
         }
 
     }
