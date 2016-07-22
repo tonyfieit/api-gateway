@@ -56,7 +56,7 @@ public class ApiGatewayController {
             .stream()
             .parallel()
             // We set the ServerSpan to each client to avoid loosing the tracking in a multi-thread invocation
-            .map((feign) -> feign.invokeService(serverSpan))
+            .map((feign) -> "Hello Openshift meetup" + feign.invokeService(serverSpan))
             .collect(Collectors.toList());
     }
 

@@ -71,7 +71,8 @@
 		<fabric8.iconRef>icons/java</fabric8.iconRef>
 		<fabric8.env.AB_ENABLED>jolokia</fabric8.env.AB_ENABLED>
 		<fabric8.env.AB_JOLOKIA_AUTH_OPENSHIFT>true</fabric8.env.AB_JOLOKIA_AUTH_OPENSHIFT>
-
+		<fabric8.env.JAVA_OPTIONS>-Xmx256m -Djava.security.egd=file:///dev/./urandom</fabric8.env.JAVA_OPTIONS>
+		
 		<!-- Readiness Probe -->
 		<fabric8.readinessProbe.httpGet.path>/health</fabric8.readinessProbe.httpGet.path>
 		<fabric8.readinessProbe.httpGet.port>8080</fabric8.readinessProbe.httpGet.port>
