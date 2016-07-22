@@ -1,4 +1,4 @@
-FROM fabric8/java-jboss-openjdk8-jdk:1.1.4
+FROM fabric8/java-jboss-openjdk8-jdk:1.1.7
 
 ENV JAVA_APP_JAR api-gateway.jar
 ENV AB_ENABLED jolokia
