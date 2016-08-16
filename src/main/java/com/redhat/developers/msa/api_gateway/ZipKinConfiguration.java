@@ -40,7 +40,8 @@ public class ZipKinConfiguration {
     @Scope(value = "singleton")
     public Brave getBrave() {
         Brave brave = new Brave.Builder("api-gateway")
-            .spanCollector(HttpSpanCollector.create("http://zipkin-query:9411", new EmptySpanCollectorMetricsHandler()))
+            .spanCollector(HttpSpanCollector.create(System.getenv("ZIPKIN_SERVER_URL"),
+            		new EmptySpanCollectorMetricsHandler()))
             .build();
         return brave;
     }
