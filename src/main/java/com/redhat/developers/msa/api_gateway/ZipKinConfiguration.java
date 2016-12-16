@@ -41,7 +41,7 @@ public class ZipKinConfiguration {
     @Scope(value = "singleton")
     public Brave getBrave() {
         String zipkingServer = System.getenv("ZIPKIN_SERVER_URL");
-        Builder builder = new Brave.Builder("ola");
+        Builder builder = new Brave.Builder("api-gateway");
         if (null == zipkingServer) {
             // Default configuration
             System.out.println("No ZIPKIN_SERVER_URL defined. Printing zipkin traces to console.");
