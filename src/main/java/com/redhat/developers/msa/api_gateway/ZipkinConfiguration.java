@@ -21,32 +21,26 @@ import com.github.kristofa.brave.Brave.Builder;
 import com.github.kristofa.brave.EmptySpanCollectorMetricsHandler;
 import com.github.kristofa.brave.ServerRequestInterceptor;
 import com.github.kristofa.brave.ServerResponseInterceptor;
-import com.github.kristofa.brave.http.DefaultSpanNameProvider;
 import com.github.kristofa.brave.http.HttpSpanCollector;
 import com.github.kristofa.brave.httpclient.BraveHttpRequestInterceptor;
 import com.github.kristofa.brave.httpclient.BraveHttpResponseInterceptor;
 import com.github.kristofa.brave.servlet.BraveServletFilter;
 
 import org.apache.camel.component.http4.HttpClientConfigurer;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
-public class ZipKinConfiguration {
+public class ZipkinConfiguration {
 
     /**
      * Register the ZipKin Filter to intercept {@link ServerRequestInterceptor} and {@link ServerResponseInterceptor}
-     *
-     * @return
      */
     @Bean
-    public FilterRegistrationBean zipkinFilter() {
-        Brave brave = getBrave();
-        FilterRegistrationBean registration =
-                new FilterRegistrationBean(new BraveServletFilter(brave.serverRequestInterceptor(), brave.serverResponseInterceptor(), new DefaultSpanNameProvider()));
+    public FilterRegistrationBean zipkinFilter(Brave brave) {
+        FilterRegistrationBean registration = new FilterRegistrationBean(BraveServletFilter.create(brave));
         // Explicit mapping to avoid trace on readiness probe
         registration.addUrlPatterns("/api/*");
         return registration;
@@ -54,25 +48,17 @@ public class ZipKinConfiguration {
 
     /**
      * Adds the brave interceptors to outgoing calls.
-     *
-     * @param brave the zipkin brave
-     * @return a http-client configurer
      */
     @Bean
-    HttpClientConfigurer zipkinConfigurer(Brave brave) {
-        return new HttpClientConfigurer() {
-            @Override
-            public void configureHttpClient(HttpClientBuilder clientBuilder) {
-                clientBuilder.addInterceptorFirst(BraveHttpRequestInterceptor.create(brave));
-                clientBuilder.addInterceptorFirst(BraveHttpResponseInterceptor.create(brave));
-            }
+    public HttpClientConfigurer zipkinConfigurer(Brave brave) {
+        return (clientBuilder) -> {
+            clientBuilder.addInterceptorFirst(BraveHttpRequestInterceptor.create(brave));
+            clientBuilder.addInterceptorFirst(BraveHttpResponseInterceptor.create(brave));
         };
     }
 
     /**
      * The instance of {@link Brave} - A instrumentation library for Zipkin
-     *
-     * @return
      */
     @Bean
     @Scope(value = "singleton")
