@@ -19,17 +19,17 @@ package com.redhat.developers.msa.api_gateway;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
 
 import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ServerSpan;
 import com.redhat.developers.msa.api_gateway.feign.FeignClientFactory;
 
-import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ApiGatewayController {
@@ -47,7 +47,7 @@ public class ApiGatewayController {
      * @return
      */
     @CrossOrigin
-    @RequestMapping(method = RequestMethod.GET, value = "/api", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = "/oldapi", produces = "application/json")
     @ApiOperation("Invoke all microservices in parallel")
     public List<String> api() {
         // This stores the Original/Parent ServerSpan from ZiPkin.
@@ -60,7 +60,7 @@ public class ApiGatewayController {
             .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/health")
+    @RequestMapping(method = RequestMethod.GET, value = "/oldhealth")
     @ApiOperation("Used to verify the health of the service")
     public String health() {
         return "I'm ok";
