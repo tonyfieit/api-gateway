@@ -20,16 +20,16 @@ import java.util.LinkedList;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.http4.HttpClientConfigurer;
 import org.apache.camel.component.hystrix.metrics.servlet.HystrixEventStreamServlet;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.apache.camel.model.HystrixConfigurationDefinition;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.util.toolbox.AggregationStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -38,7 +38,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@EnableConfigurationProperties(ServiceConfiguration.class)
+//@CamelZipkin
 public class ApiGatewayApplication {
 
 	@Value("${service.host}")
@@ -47,7 +47,6 @@ public class ApiGatewayApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApiGatewayApplication.class, args);
 	}
-
 
 	/**
 	 * Bind the Camel servlet at the "/api" context path.
@@ -99,39 +98,42 @@ public class ApiGatewayApplication {
                     .executionTimeoutInMilliseconds(1000);
 
 			from("direct:aloha")
+                    .id("aloha")
 					.removeHeaders("*")
 					.setHeader(Exchange.HTTP_METHOD, constant("GET"))
 					.hystrix()
                         .hystrixConfiguration(hystrixConfig)
 						.id("aloha")
                         .groupKey("http://aloha:8080/")
-						.to("http4://aloha:8080/api/aloha?bridgeEndpoint=true&connectionClose=true")
+						.to("http4:aloha:8080/api/aloha?bridgeEndpoint=true&connectionClose=true&http&httpClientConfigurer=#zipkinConfigurer")
 						.convertBodyTo(String.class)
 					.onFallback()
 						.transform().constant("Aloha response (fallback)")
 					.end();
 
 			from("direct:hola")
+                    .id("hola")
 					.removeHeaders("*")
 					.setHeader(Exchange.HTTP_METHOD, constant("GET"))
 					.hystrix()
                         .hystrixConfiguration(hystrixConfig)
                         .id("hola")
                         .groupKey("http://hola:8080/")
-						.to("http4://hola:8080/api/hola?bridgeEndpoint=true&connectionClose=true")
+						.to("http4:hola:8080/api/hola?bridgeEndpoint=true&connectionClose=true&httpClientConfigurer=#zipkinConfigurer")
 						.convertBodyTo(String.class)
 					.onFallback()
 						.transform().constant("Hola response (fallback)")
 					.end();
 
 			from("direct:ola")
+                    .id("ola")
 					.removeHeaders("*")
 					.setHeader(Exchange.HTTP_METHOD, constant("GET"))
 					.hystrix()
                         .hystrixConfiguration(hystrixConfig)
                         .id("ola")
                         .groupKey("http://ola:8080/")
-						.to("http4://ola:8080/api/ola?bridgeEndpoint=true&connectionClose=true")
+						.to("http4:ola:8080/api/ola?bridgeEndpoint=true&connectionClose=true&httpClientConfigurer=#zipkinConfigurer")
 						.convertBodyTo(String.class)
 					.onFallback()
 						.transform().constant("Ola response (fallback)")
@@ -139,13 +141,14 @@ public class ApiGatewayApplication {
 
 
 			from("direct:bonjour")
+                    .id("bonjour")
 					.removeHeaders("*")
 					.setHeader(Exchange.HTTP_METHOD, constant("GET"))
 					.hystrix()
                         .hystrixConfiguration(hystrixConfig)
                         .id("bonjour")
                         .groupKey("http://bonjour:8080/")
-						.to("http4://bonjour:8080/api/bonjour?bridgeEndpoint=true&connectionClose=true")
+						.to("http4:bonjour:8080/api/bonjour?bridgeEndpoint=true&connectionClose=true&httpClientConfigurer=#zipkinConfigurer")
 						.convertBodyTo(String.class)
 					.onFallback()
 						.transform().constant("Bonjour response (fallback)")

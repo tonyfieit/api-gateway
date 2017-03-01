@@ -46,7 +46,7 @@
 		<!-- other versions -->
 		<netflix.feign.version>8.15.1</netflix.feign.version>
 		<hystrix.version>1.5.1</hystrix.version>
-		<brave.version>3.9.1</brave.version>
+		<brave.version>4.0.6</brave.version>
 		<swagger.version>1.5.8</swagger.version>
 		<springfox.version>2.4.0</springfox.version>
 
@@ -124,6 +124,11 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-swagger-java-starter</artifactId>
 		</dependency>
+
+		<!--<dependency>-->
+			<!--<groupId>org.apache.camel</groupId>-->
+			<!--<artifactId>camel-zipkin-starter</artifactId>-->
+		<!--</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
