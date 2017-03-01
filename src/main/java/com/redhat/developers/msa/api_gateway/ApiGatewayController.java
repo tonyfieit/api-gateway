@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+//@RestController
 public class ApiGatewayController {
 
     @Autowired
@@ -60,7 +60,7 @@ public class ApiGatewayController {
             .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/oldhealth")
+    @RequestMapping(method = RequestMethod.GET, value = "/health")
     @ApiOperation("Used to verify the health of the service")
     public String health() {
         return "I'm ok";
