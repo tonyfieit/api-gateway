@@ -1,17 +1,18 @@
-/*
- * Copyright 2016 Red Hat, Inc.
- *
- * Red Hat licenses this file to you under the Apache License, version
- * 2.0 (the "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+/**
+ * JBoss, Home of Professional Open Source
+ * Copyright 2017, Red Hat, Inc. and/or its affiliates, and individual
+ * contributors by the @authors tag. See the copyright.txt in the
+ * distribution for a full listing of individual contributors.
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
- * implied.  See the License for the specific language governing
- * permissions and limitations under the License.
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.redhat.developers.msa.api_gateway;
 
@@ -39,7 +40,7 @@ public class CamelRestEndpoints extends RouteBuilder {
         restConfiguration()
                 .host(serviceHost)
                 .bindingMode(RestBindingMode.json)
-                .contextPath("/api/")
+                .contextPath("/api")
                 .apiContextPath("/doc")
                     .apiProperty("api.title", "API-Gateway  REST API")
                     .apiProperty("api.description", "Operations that can be invoked in the api-gateway")
@@ -52,8 +53,8 @@ public class CamelRestEndpoints extends RouteBuilder {
          * Ciao service
          */
 
-        // full path: /api/ciao
-        rest().get("/ciao")
+        // full path: /api/gateway
+        rest().get("/gateway")
                 .description("Invoke all microservices in parallel")
                 .outTypeList(String.class)
                 .apiDocs(true)

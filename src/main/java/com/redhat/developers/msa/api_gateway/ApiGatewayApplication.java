@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2016, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2017, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  * <p/>
@@ -16,6 +16,7 @@
  */
 package com.redhat.developers.msa.api_gateway;
 
+import org.apache.camel.zipkin.starter.CamelZipkin;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -23,8 +24,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
+@CamelZipkin
 public class ApiGatewayApplication {
-
 
     public static void main(String[] args) {
         SpringApplication.run(ApiGatewayApplication.class, args);
