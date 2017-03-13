@@ -75,9 +75,13 @@ public class CamelConfiguration {
         clientConfig.put("http4:ola:*", "ola");
         clientConfig.put("http4:bonjour:*", "bonjour");
 
+        zipkin.setClientServiceMappings(clientConfig);
+
         // Map consumer endpoints to names
         Map<String, String> serverConfig = new HashMap<>();
         serverConfig.put("servlet:*", "api-gateway");
+
+        zipkin.setServerServiceMappings(serverConfig);
 
         // Tracer configuration
         zipkin.setServiceName("api-gateway");
