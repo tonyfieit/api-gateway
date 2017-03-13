@@ -17,6 +17,7 @@
 package com.redhat.developers.msa.api_gateway;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -67,6 +68,7 @@ public class CamelRestEndpoints extends RouteBuilder {
                         .to("direct:ola")
                         .to("direct:bonjour")
                     .end()
+                    .transform().body(List.class, list -> list)
                     .setHeader("Access-Control-Allow-Credentials", constant("true"))
                     .setHeader("Access-Control-Allow-Origin", header("Origin"));
 
