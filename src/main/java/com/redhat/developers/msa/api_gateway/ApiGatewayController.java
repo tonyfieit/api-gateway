@@ -47,7 +47,7 @@ public class ApiGatewayController {
      * @return
      */
     @CrossOrigin
-    @RequestMapping(method = RequestMethod.GET, value = "/api", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/gateway", produces = "application/json")
     @ApiOperation("Invoke all microservices in parallel")
     public List<String> api() {
         // This stores the Original/Parent ServerSpan from ZiPkin.
