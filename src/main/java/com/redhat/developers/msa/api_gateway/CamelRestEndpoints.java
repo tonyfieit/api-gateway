@@ -51,7 +51,7 @@ public class CamelRestEndpoints extends RouteBuilder {
 
 
         /*
-         * Ciao service
+         * Gateway service
          */
 
         // full path: /api/gateway
