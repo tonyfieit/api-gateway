@@ -25,39 +25,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.kristofa.brave.Brave;
-import com.github.kristofa.brave.ServerSpan;
-import com.redhat.developers.msa.api_gateway.feign.FeignClientFactory;
+import com.redhat.developers.msa.api_gateway.feign.GenericFeignClient;
 
+import io.opentracing.contrib.spanmanager.DefaultSpanManager;
+import io.opentracing.contrib.spanmanager.SpanManager;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class ApiGatewayController {
 
     @Autowired
-    private FeignClientFactory feignClientFactory;
+    private List<GenericFeignClient> genericFeignClients;
 
-    @Autowired
-    private Brave brave;
-
-    /**
-     * This /api REST endpoint uses Java 8 parallel stream to create the Feign, invoke it, and collect the result as a List that
-     * will be rendered as a JSON Array.
-     *
-     * @return
-     */
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET, value = "/api/gateway", produces = "application/json")
     @ApiOperation("Invoke all microservices in parallel")
     public List<String> api() {
-        // This stores the Original/Parent ServerSpan from ZiPkin.
-        ServerSpan serverSpan = brave.serverSpanThreadBinder().getCurrentServerSpan();
-        return feignClientFactory.getFeignClients()
-            .stream()
-            .parallel()
-            // We set the ServerSpan to each client to avoid loosing the tracking in a multi-thread invocation
-            .map((feign) -> feign.invokeService(serverSpan))
-            .collect(Collectors.toList());
+        SpanManager.ManagedSpan serverSpan = DefaultSpanManager.getInstance().current();
+        return genericFeignClients
+                .stream()
+                .parallel()
+                // We have to set serverSpan because this executor service is not binding server span to new thread
+                .map(genericFeignClient -> {
+                    DefaultSpanManager.getInstance().activate(serverSpan.getSpan());
+                    return genericFeignClient.invokeService();
+                })
+                .collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/health")

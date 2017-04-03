@@ -16,10 +16,34 @@
  */
 package com.redhat.developers.msa.api_gateway.feign;
 
-import feign.RequestLine;
 
-public interface AlohaService {
+import com.redhat.developers.msa.api_gateway.TracingConfiguration;
 
-    @RequestLine("GET /api/aloha")
-    String aloha();
+
+import io.opentracing.Tracer;
+
+/**
+ * This class constructs a Feign Client to be invoked
+ *
+ */
+public abstract class GenericFeignClient<T> {
+
+    protected T client;
+
+    /**
+     * @param tracer tracer
+     * @param classType feign interface
+     * @param serviceName service name
+     * @param fallback fallback
+     */
+    public GenericFeignClient(Tracer tracer, Class<T> classType, String serviceName, T fallback) {
+        this.client = TracingConfiguration.createFeign(tracer, classType, serviceName, fallback);
+    }
+
+    /**
+     * Invoke service
+     *
+     * @return invocation result
+     */
+    public abstract String invokeService();
 }
