@@ -190,7 +190,7 @@
 							<build>
 								<from>${docker.from}</from>
 								<assembly>
-									<basedir>/app</basedir>
+									<basedir>/deployments</basedir>
 									<descriptorRef>artifact</descriptorRef>
 								</assembly>
 								<env>
