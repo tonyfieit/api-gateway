@@ -45,11 +45,12 @@
 
 		<!-- other versions -->
 		<openfeign.version>9.4.0</openfeign.version>
-		<openfeign.opentracing.version>0.0.1</openfeign.opentracing.version>
+		<openfeign.opentracing.version>0.0.2</openfeign.opentracing.version>
 		<hystrix.version>1.5.1</hystrix.version>
-		<brave.opentracing.version>0.19.2</brave.opentracing.version>
-		<opentracing.version>0.20.9</opentracing.version>
-		<opentracing.contrib.spring.autoconfigure.version>0.0.2</opentracing.contrib.spring.autoconfigure.version>
+		<brave.opentracing.version>0.19.3</brave.opentracing.version>
+		<opentracing.version>0.21.0</opentracing.version>
+		<opentracing.contrib.spring.autoconfigure.version>0.0.3</opentracing.contrib.spring.autoconfigure.version>
+		<version.jaeger>0.18.0</version.jaeger>
 		<zipkin.reporter.version>0.6.12</zipkin.reporter.version>
 		<swagger.version>1.5.8</swagger.version>
 		<springfox.version>2.4.0</springfox.version>
@@ -141,6 +142,13 @@
 			<groupId>io.zipkin.reporter</groupId>
 			<artifactId>zipkin-sender-urlconnection</artifactId>
 			<version>${zipkin.reporter.version}</version>
+		</dependency>
+
+		<!-- OpenTracing implementation - Jaeger -->
+		<dependency>
+			<groupId>com.uber.jaeger</groupId>
+			<artifactId>jaeger-core</artifactId>
+			<version>${version.jaeger}</version>
 		</dependency>
 
 		<!-- Swagger -->
