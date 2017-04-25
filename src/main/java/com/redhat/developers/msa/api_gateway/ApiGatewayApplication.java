@@ -16,7 +16,7 @@
  */
 package com.redhat.developers.msa.api_gateway;
 
-import org.apache.camel.zipkin.starter.CamelZipkin;
+import org.apache.camel.opentracing.starter.CamelOpenTracing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -24,7 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@CamelZipkin
+@CamelOpenTracing
 public class ApiGatewayApplication {
 
     public static void main(String[] args) {

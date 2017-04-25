@@ -38,10 +38,11 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 
 		<!-- other versions -->
-		<camel.version>2.18.2</camel.version>
+		<camel.version>2.19.0-SNAPSHOT</camel.version>
 		<spring-boot.version>1.4.4.RELEASE</spring-boot.version>
-		<brave.version>3.9.1</brave.version>
 		<springfox.version>2.4.0</springfox.version>
+		<version.jaeger>0.18.0</version.jaeger>
+		<io.opentracing.version>0.21.0</io.opentracing.version>
 
 		<!-- fabric8 version -->
 		<fabric8.version>2.2.105</fabric8.version>
@@ -74,6 +75,20 @@
 
 	</properties>
 
+	<!-- TODO REMOVE -->
+	<repositories>
+		<repository>
+			<id>apache.snapshots</id>
+			<name>Apache Development Snapshot Repository</name>
+			<url>https://repository.apache.org/content/repositories/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 	<dependencyManagement>
 		<dependencies>
@@ -123,7 +138,19 @@
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-zipkin-starter</artifactId>
+			<artifactId>camel-opentracing-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.opentracing</groupId>
+			<artifactId>opentracing-noop</artifactId>
+			<version>${io.opentracing.version}</version>
+		</dependency>
+
+		<!-- OpenTracing implementation - Jaeger -->
+		<dependency>
+			<groupId>com.uber.jaeger</groupId>
+			<artifactId>jaeger-core</artifactId>
+			<version>${version.jaeger}</version>
 		</dependency>
 
 		<dependency>
@@ -134,13 +161,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-
-		<!-- Brave Zipkin -->
-		<dependency>
-			<groupId>io.zipkin.brave</groupId>
-			<artifactId>brave-spancollector-http</artifactId>
-			<version>${brave.version}</version>
 		</dependency>
 
 		<!-- Swagger -->
