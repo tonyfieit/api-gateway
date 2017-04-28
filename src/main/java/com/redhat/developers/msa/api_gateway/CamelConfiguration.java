@@ -68,7 +68,7 @@ public class CamelConfiguration {
 
     @Bean
     public Tracer tracer() {
-        String jaegerURL = System.getenv("JAEGER_SERVER_URL");
+        String jaegerURL = System.getenv("JAEGER_SERVER_HOSTNAME");
         if (jaegerURL != null) {
             log.info("Using Jaeger tracer");
             return jaegerTracer(jaegerURL);
