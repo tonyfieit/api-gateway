@@ -45,11 +45,11 @@
 
 		<!-- other versions -->
 		<openfeign.version>9.4.0</openfeign.version>
-		<openfeign.opentracing.version>0.0.2</openfeign.opentracing.version>
+		<openfeign.opentracing.version>0.0.3</openfeign.opentracing.version>
 		<hystrix.version>1.5.1</hystrix.version>
-		<opentracing.version>0.21.0</opentracing.version>
-		<opentracing.contrib.spring.autoconfigure.version>0.0.3</opentracing.contrib.spring.autoconfigure.version>
-		<version.jaeger>0.18.0</version.jaeger>
+		<opentracing.version>0.22.0</opentracing.version>
+		<opentracing.contrib.spring.autoconfigure.version>0.0.4</opentracing.contrib.spring.autoconfigure.version>
+		<version.jaeger>0.19.0</version.jaeger>
 		<swagger.version>1.5.8</swagger.version>
 		<springfox.version>2.4.0</springfox.version>
 	</properties>

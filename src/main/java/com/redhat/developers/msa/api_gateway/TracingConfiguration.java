@@ -30,7 +30,7 @@ import com.uber.jaeger.metrics.StatsFactoryImpl;
 import com.uber.jaeger.reporters.RemoteReporter;
 import com.uber.jaeger.samplers.ProbabilisticSampler;
 import com.uber.jaeger.senders.Sender;
-import com.uber.jaeger.senders.UDPSender;
+import com.uber.jaeger.senders.UdpSender;
 
 import feign.Logger;
 import feign.httpclient.ApacheHttpClient;
@@ -51,7 +51,7 @@ public class TracingConfiguration {
 
     @Bean
     public Tracer tracer() {
-        String jaegerURL = System.getenv("JAEGER_SERVER_URL");
+        String jaegerURL = System.getenv("JAEGER_SERVER_HOSTNAME");
         if (jaegerURL != null) {
             log.info("Using Jaeger tracer");
             return jaegerTracer(jaegerURL);
@@ -62,7 +62,7 @@ public class TracingConfiguration {
     }
 
     private Tracer jaegerTracer(String url) {
-        Sender sender = new UDPSender(url, 0, 0);
+        Sender sender = new UdpSender(url, 0, 0);
         return new com.uber.jaeger.Tracer.Builder(SERVICE_NAME,
                 new RemoteReporter(sender, 100, 50,
                         new Metrics(new StatsFactoryImpl(new NullStatsReporter()))),
