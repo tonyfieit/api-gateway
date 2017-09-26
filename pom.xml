@@ -46,7 +46,7 @@
 
 		<!-- Setting the image explicity to use redhat-openjdk -->
 		<!-- There is kind of issue honoring JAVA_OPTIONS with fabric8-s2i images -->
-		<fabric8.generator.from>registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift</fabric8.generator.from>
+		<fabric8.generator.from>fabric8/s2i-java</fabric8.generator.from>
 	</properties>
 
 	<dependencyManagement>

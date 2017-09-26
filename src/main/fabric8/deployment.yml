@@ -9,7 +9,3 @@ spec:
       - env:
          - name: JAVA_OPTIONS
            value: "-Xmx256m"
-         - name: AB_JOLOKIA_AUTH_OPENSHIFT
-           value: "true"
-         - name: AB_ENABLED
-           value: "off"
