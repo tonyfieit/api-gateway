@@ -19,7 +19,7 @@ Build and Deploy api-gateway locally
 Deploy the application in Openshift
 -----------------------------------
 
-1. Make sure to be connected to the Docker Daemon
+1. Make sure to be connected to the OpenShift
 2. Execute
 
-		mvn clean package docker:build fabric8:json fabric8:apply
+		mvn package fabric8:deploy
