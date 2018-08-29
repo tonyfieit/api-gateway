@@ -1,4 +1,4 @@
-FROM fabric8/java-jboss-openjdk8-jdk:1.3.1
+FROM fabric8/java-jboss-openjdk8-jdk:1.5.1
 
 ENV JAVA_APP_JAR api-gateway.jar
 ENV AB_ENABLED off
